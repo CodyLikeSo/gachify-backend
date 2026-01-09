@@ -11,3 +11,5 @@ __pycache__/
 # Alembic
 alembic/versions/*
 !alembic/versions/.gitkeep
+
+jwt-utils/certs/
