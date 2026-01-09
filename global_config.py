@@ -19,3 +19,11 @@ test_database = os.getenv("POSTGRES_TESTDB_DBNAME")
 REDIS_PORT = os.getenv("REDIS_PORT")
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
+# MiniO
+MINIO_PORT = os.getenv("MINIO_PORT")
+MINIO_WEB_PORT = os.getenv("MINIO_WEB_PORT")
+MINIO_HOST = os.getenv("MINIO_HOST")
+MINIO_ADMIN = os.getenv("MINIO_ADMIN")
+MINIO_PASSWORD = os.getenv("MINIO_PASSWORD")
+TRACK_BUCKET = os.getenv("TRACK_BUCKET")

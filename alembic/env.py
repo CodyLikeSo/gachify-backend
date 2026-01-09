@@ -14,6 +14,7 @@ load_dotenv()
 
 from database.db import Base
 from health.models import TestTable
+from tracks.models import Track
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
