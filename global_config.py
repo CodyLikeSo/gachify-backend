@@ -7,6 +7,8 @@ dotenv_path = project_root / ".env"
 
 load_dotenv(dotenv_path=dotenv_path)
 
+TASK_DB = 1
+
 # Postgres
 user = os.getenv("POSTGRES_DB_USER")
 password = os.getenv("POSTGRES_DB_PASSWORD")

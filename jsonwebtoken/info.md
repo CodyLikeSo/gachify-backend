@@ -1,0 +1,1 @@
+# Здесь должен быть jwt-utils/certs/ в котором jwt-public.pem и jwt-private.pem

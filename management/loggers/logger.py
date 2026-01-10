@@ -5,11 +5,11 @@ import sys
 
 class JSONFormatter(logging.Formatter):
     COLORS = {
-        "DEBUG": "\033[36m",    # Cyan
-        "INFO": "\033[34m",     # ← Синий (Blue)
+        "DEBUG": "\033[36m",  # Cyan
+        "INFO": "\033[34m",  # ← Синий (Blue)
         "WARNING": "\033[33m",  # Yellow
-        "ERROR": "\033[31m",    # Red
-        "CRITICAL": "\033[35m", # Magenta
+        "ERROR": "\033[31m",  # Red
+        "CRITICAL": "\033[35m",  # Magenta
     }
     RESET = "\033[0m"
 
@@ -35,7 +35,8 @@ class JSONFormatter(logging.Formatter):
             output = f"{color}{output}{self.RESET}"
 
         return output
-    
+
+
 def setup_logging(colored: bool = False):
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(JSONFormatter(colored=colored))

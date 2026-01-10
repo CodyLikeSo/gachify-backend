@@ -1,8 +1,10 @@
 # schemas.py
 from pydantic import BaseModel
 
+
 class TrackCreate(BaseModel):
     title: str
+
 
 class TrackResponse(BaseModel):
     id: int
@@ -11,3 +13,12 @@ class TrackResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class TrackListResponse(BaseModel):
+    id: int
+    title: str
+
+
+class TrackUpdate(BaseModel):
+    title: str

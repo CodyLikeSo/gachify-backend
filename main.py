@@ -6,10 +6,11 @@ from tracks.dependencies import init_minio
 
 from health.views import router as health_router
 from tracks.views import router as tracks_router
-# from users.views.register_views import router as register_router
+from users.views.auth import router as auth_router
+
 # from users.views.email_views import router as email_router
 # from users.views.login_views import router as login_router
-# from users.views.crud_views import UsersCrud
+from users.views.crud import UsersCrud
 
 from redisdb.utils import init_redis, close_redis
 
@@ -27,11 +28,11 @@ app = FastAPI(lifespan=lifespan)
 # Utils routers
 app.include_router(health_router)
 app.include_router(tracks_router)
-# app.include_router(email_router)
+app.include_router(auth_router)
 # app.include_router(login_router)
 
 # Cruds routers
-# app.include_router(UsersCrud.router)
+app.include_router(UsersCrud.router)
 
 
 app.add_middleware(

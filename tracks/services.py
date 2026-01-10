@@ -6,6 +6,7 @@ from sqlalchemy.future import select
 
 BUCKET_NAME = "tracks"
 
+
 class TrackService:
     def __init__(self, db, s3_client):
         self.db = db
@@ -20,18 +21,13 @@ class TrackService:
     async def upload_track(self, filename: str, file_data: bytes) -> Track:
         await self.ensure_bucket_exists()
 
-        ext = filename.split('.')[-1] if '.' in filename else 'mp3'
+        ext = filename.split(".")[-1] if "." in filename else "mp3"
         object_key = f"{uuid.uuid4().hex}.{ext}"
 
-        # Загружаем в MinIO
         await asyncio.to_thread(
-            self.s3.put_object,
-            Bucket=BUCKET_NAME,
-            Key=object_key,
-            Body=file_data
+            self.s3.put_object, Bucket=BUCKET_NAME, Key=object_key, Body=file_data
         )
 
-        # Сохраняем в БД
         track = Track(title=filename, object_key=object_key)
         self.db.add(track)
         await self.db.commit()
@@ -39,24 +35,40 @@ class TrackService:
         return track
 
     async def delete_track(self, track_id: int) -> bool:
-        # Ищем трек
         result = await self.db.execute(select(Track).where(Track.id == track_id))
         track = result.scalar_one_or_none()
         if not track:
             return False
 
-        # Удаляем из MinIO
         await asyncio.to_thread(
-            self.s3.delete_object,
-            Bucket=BUCKET_NAME,
-            Key=track.object_key
+            self.s3.delete_object, Bucket=BUCKET_NAME, Key=track.object_key
         )
 
-        # Удаляем из БД
         await self.db.delete(track)
         await self.db.commit()
         return True
 
     def get_audio_url(self, object_key: str) -> str:
-        # Для фронтенда: URL для воспроизведения
         return f"http://localhost:9000/{BUCKET_NAME}/{object_key}"
+
+    async def get_all_tracks(self, search: str | None = None):
+        query = select(Track)
+        if search:
+            query = query.where(Track.title.icontains(search))
+        result = await self.db.execute(query)
+        return result.scalars().all()
+
+    async def get_track_by_id(self, track_id: int):
+        result = await self.db.execute(select(Track).where(Track.id == track_id))
+        return result.scalar_one()
+
+    async def update_track(self, track_id: int, title: str) -> Track:
+        result = await self.db.execute(select(Track).where(Track.id == track_id))
+        track = result.scalar_one_or_none()
+        if not track:
+            raise ValueError("Track not found")
+
+        track.title = title
+        await self.db.commit()
+        await self.db.refresh(track)
+        return track
